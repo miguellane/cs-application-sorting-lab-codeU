@@ -3,6 +3,7 @@
  */
 package com.flatironschool.javacs;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -63,8 +64,40 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public List<T> mergeSort(List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
-        return null;
+		if(list.size() == 1){
+			return list;
+		}else if(list.size() == 2){
+			insertionSort(list, comparator);
+			return list;		
+		}
+		List<T> lista = mergeSort(list.subList(0,list.size()/2), comparator);
+		List<T> listb = mergeSort(list.subList(list.size()/2,list.size()), comparator);
+		List<T> listc = merge(lista, listb, comparator);
+	        return listc;
+	}
+	public List<T> merge(List<T> lista, List<T> listb, Comparator<T> comparator){
+		List<T> listc = new ArrayList<T>();
+
+		int a = 0;
+		int b = 0;
+		while(a < lista.size() && b < listb.size()){
+			if(comparator.compare(lista.get(a), listb.get(b)) < 0){
+				listc.add(lista.get(a));
+				a++;
+			}else{
+				listc.add(listb.get(b));
+				b++;
+			}
+		}
+		while(a < lista.size()){
+			listc.add(lista.get(a));
+			a++;
+		}
+		while(b < listb.size()){
+			listc.add(listb.get(b));
+			b++;
+		}
+		return listc;
 	}
 
 	/**
@@ -75,7 +108,16 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public void heapSort(List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
+		int i = list.size();
+		PriorityQueue<T> queue = new PriorityQueue<T>(i,comparator);
+		for(T element: list){
+			queue.offer(element);
+		}
+		list.clear();
+		while(i != 0){
+			list.add(queue.poll());
+			i--;
+		}
 	}
 
 	
@@ -89,8 +131,19 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public List<T> topK(int k, List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
-        return null;
+		System.out.println(k);
+		PriorityQueue<T> queue = new PriorityQueue<T>(k,comparator);
+		for(T element: list){
+			queue.add(element);
+			if(queue.size() > k)
+				queue.poll();
+		}
+		List<T> top = new ArrayList<T>();
+		while(k != 0){
+			top.add(queue.poll());
+			k--;
+		}
+        	return top;
 	}
 
 	
